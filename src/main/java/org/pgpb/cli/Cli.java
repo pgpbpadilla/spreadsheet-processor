@@ -1,5 +1,6 @@
 package org.pgpb.cli;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.cli.*;
 import org.pgpb.spreadsheet.Spreadsheet;
 
@@ -41,13 +42,15 @@ public class Cli {
 
                 try(Stream<String> contents = Files.lines(Paths.get(filePath))){
 
-                    sheet = new Spreadsheet(contents);
+                    ImmutableList<String> lines =
+                        contents.collect(ImmutableList.toImmutableList());
+                    sheet = new Spreadsheet(lines);
 
                 } catch (IOException e) {
                     log.log(Level.SEVERE, e.getLocalizedMessage());
                 }
 
-                System.out.println(sheet);
+                sheet.toTSVRows().forEach(s -> System.out.println(s));
             } else {
                 log.log(Level.SEVERE, "Missing v option");
                 help();
