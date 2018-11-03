@@ -1,9 +1,14 @@
 package org.pgpb.cli;
 
 import org.apache.commons.cli.*;
+import org.pgpb.spreadsheet.Spreadsheet;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 public class Cli {
     private static final Logger log = Logger.getLogger(Cli.class.getName());
@@ -15,7 +20,7 @@ public class Cli {
         this.args = args;
 
         options.addOption("h", "help", false, "show help.");
-        options.addOption("v", "var", true, "Here you can set parameter .");
+        options.addOption("f", "file", true, "The path to the input file.");
 
     }
 
@@ -26,16 +31,25 @@ public class Cli {
         try {
             cmd = parser.parse(options, args);
 
-            if (cmd.hasOption(""))
-
-            if (cmd.hasOption("h"))
+            if (cmd.hasOption("h")) {
                 help();
+            }
 
-            if (cmd.hasOption("v")) {
-                log.log(Level.INFO, "Using cli argument -v=" + cmd.getOptionValue("v"));
-                // Whatever you want to do with the setting goes here
+            if (cmd.hasOption("file")) {
+                String filePath = cmd.getOptionValue("f");
+                Spreadsheet sheet = null;
+
+                try(Stream<String> contents = Files.lines(Paths.get(filePath))){
+
+                    sheet = new Spreadsheet(contents);
+
+                } catch (IOException e) {
+                    log.log(Level.SEVERE, e.getLocalizedMessage());
+                }
+
+                System.out.println(sheet);
             } else {
-                log.log(Level.SEVERE, "MIssing v option");
+                log.log(Level.SEVERE, "Missing v option");
                 help();
             }
 
@@ -46,7 +60,6 @@ public class Cli {
     }
 
     private void help() {
-        // This prints out some help
         HelpFormatter formater = new HelpFormatter();
 
         formater.printHelp("Main", options);
