@@ -2,17 +2,17 @@ package org.pgpb.cli;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.cli.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.pgpb.spreadsheet.Spreadsheet;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class Cli {
-    private static final Logger log = Logger.getLogger(Cli.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(Cli.class);
     private String[] args = null;
     private Options options = new Options();
 
@@ -45,26 +45,22 @@ public class Cli {
                     ImmutableList<String> lines =
                         contents.collect(ImmutableList.toImmutableList());
                     sheet = new Spreadsheet(lines);
-
+                    sheet.toTSVRows().forEach(s -> System.out.println(s));
                 } catch (IOException e) {
-                    log.log(Level.SEVERE, e.getLocalizedMessage());
+                    LOGGER.error("Could not read input file: " + filePath);
                 }
-
-                sheet.toTSVRows().forEach(s -> System.out.println(s));
             } else {
                 help();
             }
 
         } catch (ParseException e) {
-            log.log(Level.SEVERE, "Failed to parse comand line properties", e);
+            LOGGER.error("Failed to parse comand line properties");
             help();
         }
     }
 
     private void help() {
         HelpFormatter formater = new HelpFormatter();
-
         formater.printHelp("Main", options);
-        System.exit(0);
     }
 }
