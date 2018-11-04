@@ -52,7 +52,6 @@ public class Cli {
 
                 sheet.toTSVRows().forEach(s -> System.out.println(s));
             } else {
-                log.log(Level.SEVERE, "Missing v option");
                 help();
             }
 

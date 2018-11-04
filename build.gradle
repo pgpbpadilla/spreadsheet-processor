@@ -2,12 +2,16 @@ buildscript {
     repositories {
         mavenCentral()
     }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
+    }
 }
 
 plugins {
     id 'java'
     id 'idea'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '4.0.2'
 }
 
 group = 'com.pgpb.spreadsheet'
