@@ -1,15 +1,17 @@
 package org.pgpb.cli;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.cli.*;
+import org.pgpb.evaluation.SpreadsheetEvaluator;
+import org.pgpb.spreadsheet.Spreadsheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.pgpb.spreadsheet.Spreadsheet;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 public class Cli {
     private static final Logger LOGGER = LoggerFactory.getLogger(Cli.class);
@@ -37,18 +39,7 @@ public class Cli {
             }
 
             if (cmd.hasOption("file")) {
-                String filePath = cmd.getOptionValue("f");
-                Spreadsheet sheet = null;
-
-                try(Stream<String> contents = Files.lines(Paths.get(filePath))){
-
-                    ImmutableList<String> lines =
-                        contents.collect(ImmutableList.toImmutableList());
-                    sheet = new Spreadsheet(lines);
-                    sheet.toTSVRows().forEach(s -> System.out.println(s));
-                } catch (IOException e) {
-                    LOGGER.error("Could not read input file: " + filePath);
-                }
+                evaluateSpreadsheet(cmd);
             } else {
                 help();
             }
@@ -56,6 +47,18 @@ public class Cli {
         } catch (ParseException e) {
             LOGGER.error("Failed to parse comand line properties");
             help();
+        }
+    }
+
+    private void evaluateSpreadsheet(CommandLine cmd) {
+        String filePath = cmd.getOptionValue("f");
+        Spreadsheet sheet = null;
+
+        try(Stream<String> contents = Files.lines(Paths.get(filePath))){
+            sheet = Spreadsheet.fromTsvLines(contents.collect(toList()));
+            SpreadsheetEvaluator.evaluate(sheet).forEach(System.out::println);
+        } catch (IOException e) {
+            LOGGER.error("Could not read input file: " + filePath);
         }
     }
 

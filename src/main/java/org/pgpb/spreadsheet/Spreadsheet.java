@@ -1,7 +1,5 @@
 package org.pgpb.spreadsheet;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class Spreadsheet {
         return rows;
     }
 
-    public static Spreadsheet fromTsvLines(ImmutableList<String> lines) {
+    public static Spreadsheet fromTsvLines(List<String> lines) {
         List<CellRow> rows = lines.stream()
             .map(CellRow::fromTsvLine)
             .collect(toList());
