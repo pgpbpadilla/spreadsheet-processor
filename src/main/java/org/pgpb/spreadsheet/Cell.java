@@ -7,7 +7,7 @@ public class Cell {
         this.content = content;
     }
 
-    public String content() {
+    public String getContent() {
         return content;
     }
 }

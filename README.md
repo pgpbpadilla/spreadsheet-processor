@@ -22,3 +22,7 @@ the result of evaluating each cell.
 - Evaluate sample file
 `$ java -jar build/libs/cflox-0.0.1-SNAPSHOT-all.jar -f sample.tsv`
 
+
+# Future work
+
+- Extending the expression parser. Look into [ANTLR](https://theantlrguy.atlassian.net/wiki/spaces/ANTLR3/pages/2687299/Expression+evaluator)

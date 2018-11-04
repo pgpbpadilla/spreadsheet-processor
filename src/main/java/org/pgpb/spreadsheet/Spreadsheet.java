@@ -2,7 +2,7 @@ package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
 
-import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -13,29 +13,29 @@ import static java.util.stream.Collectors.toList;
 public class Spreadsheet {
     private List<CellRow> rows;
 
-    public Spreadsheet(ImmutableList<String> tsvRows) {
-        this.rows = tsvRows.stream()
-            .map(tsvRow -> convertToCells(tsvRow))
-            .map(CellRow::new)
+    public Spreadsheet(List<CellRow> rows) {
+        this.rows = rows;
+    }
+
+    public List<CellRow> getRows() {
+        return rows;
+    }
+
+    public static Spreadsheet fromTsvLines(ImmutableList<String> lines) {
+        List<CellRow> rows = lines.stream()
+            .map(CellRow::fromTsvLine)
             .collect(toList());
+        return new Spreadsheet(rows);
     }
 
-    private List<Cell> convertToCells(String tsvRow) {
-        String[] tsvCells = tsvRow.split("\\t");
-        List<Cell> cells = Arrays.asList(tsvCells)
-            .stream()
-            .map(Cell::new)
-            .collect(toList());
-        return cells;
+    public int getRowCount() {
+        return rows.size();
     }
 
-    public boolean someLibraryMethod() {
-        return true;
-    }
-
-    public List<String> toTSVRows() {
+    public int columnCount() {
         return rows.stream()
-            .map(cellRow -> cellRow.toString())
-            .collect(toList());
+            .map(r -> r.getCells().size())
+            .max(Comparator.naturalOrder())
+            .get();
     }
 }

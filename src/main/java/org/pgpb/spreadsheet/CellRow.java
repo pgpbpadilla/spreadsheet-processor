@@ -1,7 +1,9 @@
 package org.pgpb.spreadsheet;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class CellRow {
     private List<Cell> cells;
@@ -10,10 +12,15 @@ public class CellRow {
         this.cells = cells;
     }
 
-    @Override
-    public String toString() {
-        return cells.stream()
-            .map(Cell::content)
-            .collect(Collectors.joining("\\t"));
+    public static CellRow fromTsvLine(String tsvLine) {
+        String[] cellContents = tsvLine.split("\\t");
+        List<Cell> cells = Arrays.stream(cellContents)
+            .map(Cell::new)
+            .collect(toList());
+        return new CellRow(cells);
+    }
+
+    public List<Cell> getCells() {
+        return cells;
     }
 }
