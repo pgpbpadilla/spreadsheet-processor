@@ -13,8 +13,8 @@ public class ExpressionEvaluatorTest {
             {"4", "4"},
             {"0", "0"},
             {"=4", "4"},
-            {"-4", "#" + String.valueOf(EvaluationError.INVALID_FORMAT)},
-            {"=-4", "#" + String.valueOf(EvaluationError.INVALID_FORMAT)},
+            {"-4", "#" + String.valueOf(EvaluationError.NEGATIVE_NUMBER)},
+            {"=-4", "#" + String.valueOf(EvaluationError.NEGATIVE_NUMBER)},
             {"A", "#" + String.valueOf(EvaluationError.INVALID_FORMAT)},
         };
     }
