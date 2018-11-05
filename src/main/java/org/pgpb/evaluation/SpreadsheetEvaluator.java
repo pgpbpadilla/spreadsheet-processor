@@ -1,9 +1,9 @@
 package org.pgpb.evaluation;
 
 import org.pgpb.spreadsheet.Cell;
-import org.pgpb.spreadsheet.CellRow;
 import org.pgpb.spreadsheet.Spreadsheet;
 
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.joining;
@@ -14,19 +14,12 @@ public class SpreadsheetEvaluator {
         return ExpressionEvaluator.evaluate(cell.getContent());
     }
 
-    public static String evaluate(CellRow row) {
-        return row.getCells().stream()
-            .map(SpreadsheetEvaluator::evaluate)
-            .collect(joining("\t"));
-    }
-
-    public static List<String> evaluate(List<CellRow> range) {
-        return range.stream()
-            .map(SpreadsheetEvaluator::evaluate)
-            .collect(toList());
-    }
-
     public static List<String> evaluate(Spreadsheet sheet) {
-        return SpreadsheetEvaluator.evaluate(sheet.getRows());
+        return Collections.emptyList();
+    }
+
+    public static String evaluate(Spreadsheet sheet, String address) {
+        String content = sheet.getCell(address).getContent();
+        return ExpressionEvaluator.evaluate(content);
     }
 }

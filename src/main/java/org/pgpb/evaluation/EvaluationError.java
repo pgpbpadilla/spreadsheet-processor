@@ -1,7 +1,8 @@
 package org.pgpb.evaluation;
 
 public enum EvaluationError {
-    INVALID_FORMAT ("Only positive numbers are allowed.");
+    INVALID_FORMAT ("Invalid format."),
+    NEGATIVE_NUMBER ("Only positive numbers are allowed.");
 
     private final String message;
 

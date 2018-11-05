@@ -11,10 +11,11 @@ public class ExpressionEvaluatorTest {
     public Object [][] getExpressions() {
         return new Object[][] {
             {"4", "4"},
+            {"0", "0"},
             {"=4", "4"},
-            {"-4", String.valueOf(EvaluationError.INVALID_FORMAT)},
-            {"=-4", String.valueOf(EvaluationError.INVALID_FORMAT)},
-            {"A", String.valueOf(EvaluationError.INVALID_FORMAT)},
+            {"-4", "#" + String.valueOf(EvaluationError.INVALID_FORMAT)},
+            {"=-4", "#" + String.valueOf(EvaluationError.INVALID_FORMAT)},
+            {"A", "#" + String.valueOf(EvaluationError.INVALID_FORMAT)},
         };
     }
     @Test(dataProvider = "expressions")
