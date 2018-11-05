@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.toList;
@@ -22,7 +23,10 @@ public class Spreadsheet {
     private Cell[][] cells;
 
     public Spreadsheet(int rows, int columns) {
-        dimensions = new Dimensions(rows, columns);
+        cells = new Cell[rows][];
+        for (int r = 0; r < rows; r++) {
+            cells[r] = new Cell[columns];
+        }
     }
 
     private static Dimensions parseHeader(String[] header) {
@@ -44,7 +48,9 @@ public class Spreadsheet {
             .skip(1)
             .map(l -> l.split("\\t"))
             .map(Arrays::asList)
-            .map(entries -> entries.stream().map(Cell::new).toArray(Cell[]::new))
+            .map(entries -> entries.stream()
+                .map(Cell::new)
+                .toArray(Cell[]::new))
             .toArray(Cell[][]::new);
 
         Spreadsheet spreadsheet = new Spreadsheet(dimensions.rows, dimensions.columns);
@@ -53,11 +59,11 @@ public class Spreadsheet {
     }
 
     public int getRowCount() {
-        return dimensions.rows;
+        return cells.length;
     }
 
     public int getColumnCount() {
-        return dimensions.columns;
+        return cells[0].length;
     }
 
     public Cell getCell(String address) {
