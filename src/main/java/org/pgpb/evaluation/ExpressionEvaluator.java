@@ -17,7 +17,7 @@ public class ExpressionEvaluator implements Evaluator {
         return ImmutableList.of();
     }
 
-    private static String evaluateText(Spreadsheet sheet, String text) {
+    private String evaluateText(Spreadsheet sheet, String text) {
         if ("".equals(text)) {
             return text;
         }
@@ -27,15 +27,20 @@ public class ExpressionEvaluator implements Evaluator {
         }
 
         if (text.charAt(0) == '=') {
-            return ExpressionEvaluator.evaluateExpression(text);
+            return evaluateExpression(sheet, text.substring(1));
         }
 
-        return ExpressionEvaluator.evaluateTerm(text);
+        return evaluateTerm(text);
     }
 
-    private static String evaluateExpression(String expression) {
-        String e = expression.substring(1);
-        return evaluateTerm(e);
+    private String evaluateExpression(
+        Spreadsheet sheet,
+        String expression
+    ) {
+        if (Character.isAlphabetic(expression.charAt(0))){
+            return sheet.getCell(expression).getContent();
+        }
+        return evaluateTerm(expression);
     }
 
     private static String evaluateTerm(String term) {
