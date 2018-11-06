@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.shouldHaveThrown;
 
 
 public class SpreadsheetTest {
@@ -89,5 +90,40 @@ public class SpreadsheetTest {
     )
     public void testFromTsvLinesBadHeader(ImmutableList<String> header) {
         Spreadsheet.fromTsvLines(header);
+    }
+
+
+    @DataProvider(name = "cellData")
+    public Object [][] cellData(){
+        return new Object[][]{
+            {
+                new Cell[][]{
+                    {new Cell("1")}
+                },
+                ImmutableList.of("1")
+            },
+            {
+                new Cell[][]{
+                    {new Cell("1"), new Cell("=1*A")}
+                },
+                ImmutableList.of("1\t=1*A")
+            },
+            {
+                new Cell[][]{
+                    {new Cell("1"), new Cell("=1*A")},
+                    {new Cell("-10"), new Cell("B3")}
+                },
+                ImmutableList.of(
+                    "1\t=1*A",
+                    "-10\tB3"
+                )
+            }
+        };
+    }
+    @Test(dataProvider = "cellData")
+    public void testToTSVLines(Cell [][] cells, List<String> expected) {
+        Spreadsheet sheet = new Spreadsheet(1, 1);
+        sheet.setCells(cells);
+        assertThat(sheet.toTSVLines()).isEqualTo(expected);
     }
 }
