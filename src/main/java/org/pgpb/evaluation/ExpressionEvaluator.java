@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import org.pgpb.spreadsheet.Cell;
 import org.pgpb.spreadsheet.Spreadsheet;
 
-import java.security.cert.CollectionCertStoreParameters;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,15 +59,15 @@ public class ExpressionEvaluator implements Evaluator {
         try {
             Integer value = Integer.parseInt(term);
             if (value < 0) {
-                return formatError(String.valueOf(ExpressionEvaluationError.NEGATIVE_NUMBER));
+                return formatError(ExpressionError.NEGATIVE_NUMBER);
             }
             return term;
         } catch (NumberFormatException e) {
-            return formatError(String.valueOf(ExpressionEvaluationError.INVALID_FORMAT));
+            return formatError(ExpressionError.INVALID_FORMAT);
         }
     }
 
-    private static String formatError(String message) {
-        return "#" + message;
+    public static String formatError(ExpressionError error) {
+        return "#" + String.valueOf(error);
     }
 }

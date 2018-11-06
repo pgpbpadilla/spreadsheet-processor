@@ -84,11 +84,33 @@ public class Spreadsheet {
             coordinate = Coordinate.fromAddress(address);
         } catch (Exception e) {
             return new Cell(
-                "#" + String.valueOf(ExpressionEvaluationError.CELL_NOT_FOUND)
+                ExpressionEvaluator.formatError(ExpressionError.INVALID_ADDRESS_FORMAT)
+            );
+        }
+        if (!cellExists(coordinate)) {
+            return new Cell(
+                ExpressionEvaluator.formatError(ExpressionError.CELL_NOT_FOUND)
             );
         }
         return cells[coordinate.row][coordinate.column];
     }
+
+    private boolean cellExists(Coordinate c) {
+        if (!hasRows()) {
+            return false;
+        }
+        if (!hasColumns()) {
+            return false;
+        }
+        if (c.row > getRowCount()) {
+            return false;
+        }
+        if (c.column > getColumnCount()) {
+            return false;
+        }
+        return true;
+    }
+
     public void setCells(Cell[][] cells) {
         this.cells = cells;
     }
@@ -107,7 +129,7 @@ public class Spreadsheet {
         return ImmutableList.copyOf(Arrays.asList(cells));
     }
 
-    private static class Dimensions {
+    public static class Dimensions {
         public final int rows;
         public final int columns;
 

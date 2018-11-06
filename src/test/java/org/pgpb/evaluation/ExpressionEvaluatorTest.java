@@ -21,11 +21,11 @@ public class ExpressionEvaluatorTest {
             {"1", "1"},
             {"=1", "1"},
             {"'Text", "Text"},
-            {"-1", "#" + ExpressionEvaluationError.NEGATIVE_NUMBER},
-            {"=-1", "#" + ExpressionEvaluationError.NEGATIVE_NUMBER},
-            {"A", "#" + ExpressionEvaluationError.INVALID_FORMAT},
-            {"=A", "#" + ExpressionEvaluationError.INVALID_FORMAT},
-            {"='Text", "#" + ExpressionEvaluationError.INVALID_FORMAT},
+            {"-1", "#" + ExpressionError.NEGATIVE_NUMBER},
+            {"=-1", "#" + ExpressionError.NEGATIVE_NUMBER},
+            {"A", "#" + ExpressionError.INVALID_FORMAT},
+            {"=A", "#" + ExpressionError.INVALID_ADDRESS_FORMAT},
+            {"='Text", "#" + ExpressionError.INVALID_FORMAT},
         };
     }
     @Test(dataProvider = "termData")

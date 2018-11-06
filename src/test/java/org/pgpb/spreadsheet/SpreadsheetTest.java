@@ -49,10 +49,19 @@ public class SpreadsheetTest {
     }
 
     @Test
+    public void testGetCellInvalidAddress() {
+        Spreadsheet sheet = new Spreadsheet(0, 0);
+        String content = sheet.getCell("IvalidAddress").getContent();
+        String expected =
+            ExpressionEvaluator.formatError(ExpressionError.INVALID_ADDRESS_FORMAT);
+        assertThat(content).isEqualTo(expected);
+    }
+
+    @Test
     public void testGetCellNotFound() {
         Spreadsheet sheet = new Spreadsheet(0, 0);
-        String expected = "#" + String.valueOf(ExpressionEvaluationError.CELL_NOT_FOUND);
-        String actual = sheet.getCell("InvalidAddress").getContent();
+        String expected = "#" + String.valueOf(ExpressionError.CELL_NOT_FOUND);
+        String actual = sheet.getCell("A1").getContent();
         assertThat(actual).isEqualTo(expected);
     }
 
