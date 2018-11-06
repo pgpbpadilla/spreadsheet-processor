@@ -1,37 +1,53 @@
 package org.pgpb.evaluation;
 
-public class ExpressionEvaluator {
-    public static String parseExpression(String expression) {
-        String e = expression.substring(1);
-        return parseTerm(e);
+import com.google.common.collect.ImmutableList;
+import org.pgpb.spreadsheet.Cell;
+import org.pgpb.spreadsheet.Spreadsheet;
+
+public class ExpressionEvaluator implements Evaluator {
+
+    @Override
+    public String evaluateCell(Spreadsheet sheet, String address) {
+        Cell cell = sheet.getCell(address);
+        return evaluateText(sheet, cell.getContent());
     }
 
-    public static String parseTerm(String term) {
+    @Override
+    public ImmutableList<String> evaluateSheet(Spreadsheet sheet) {
+        return ImmutableList.of();
+    }
+
+    private static String evaluateText(Spreadsheet sheet, String text) {
+        if ("".equals(text)) {
+            return text;
+        }
+
+        if (text.charAt(0) == '\'') {
+            return text.substring(1);
+        }
+
+        if (text.charAt(0) == '=') {
+            return ExpressionEvaluator.evaluateExpression(text);
+        }
+
+        return ExpressionEvaluator.evaluateTerm(text);
+    }
+
+    private static String evaluateExpression(String expression) {
+        String e = expression.substring(1);
+        return evaluateTerm(e);
+    }
+
+    private static String evaluateTerm(String term) {
         try {
             Integer value = Integer.parseInt(term);
             if (value < 0) {
-                return formatError(String.valueOf(EvaluationError.NEGATIVE_NUMBER));
+                return formatError(String.valueOf(ExpressionEvaluationError.NEGATIVE_NUMBER));
             }
             return term;
         } catch (NumberFormatException e) {
-            return formatError(String.valueOf(EvaluationError.INVALID_FORMAT));
+            return formatError(String.valueOf(ExpressionEvaluationError.INVALID_FORMAT));
         }
-    }
-
-    public static String evaluate(String content) {
-        if ("".equals(content)) {
-            return content;
-        }
-
-        if (content.charAt(0) == '=') {
-            return parseExpression(content);
-        }
-
-        if (content.charAt(0) == '\'') {
-            return content.substring(1);
-        }
-
-        return parseTerm(content);
     }
 
     private static String formatError(String message) {
