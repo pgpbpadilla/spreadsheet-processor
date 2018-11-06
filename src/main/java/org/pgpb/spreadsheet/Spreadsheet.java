@@ -1,6 +1,7 @@
 package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
+import org.pgpb.evaluation.ExpressionEvaluationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +67,14 @@ public class Spreadsheet {
     }
 
     public Cell getCell(String address) {
-        Coordinate coordinate = Coordinate.fromAddress(address) ;
+        Coordinate coordinate = null;
+        try {
+            coordinate = Coordinate.fromAddress(address);
+        } catch (Exception e) {
+            return new Cell(
+                "#" + String.valueOf(ExpressionEvaluationError.CELL_NOT_FOUND)
+            );
+        }
         return cells[coordinate.row][coordinate.column];
     }
     public void setCells(Cell[][] cells) {

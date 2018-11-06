@@ -1,6 +1,7 @@
 package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
+import org.pgpb.evaluation.ExpressionEvaluationError;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -32,6 +33,14 @@ public class SpreadsheetTest {
 
         assertThat(sheet.getCell("A1").getContent()).isEqualTo("1");
         assertThat(sheet.getCell("B3").getContent()).isEqualTo("6");
+    }
+
+    @Test
+    public void testGetCellNotFound() {
+        Spreadsheet sheet = new Spreadsheet(0, 0);
+        String expected = "#" + String.valueOf(ExpressionEvaluationError.CELL_NOT_FOUND);
+        String actual = sheet.getCell("InvalidAddress").getContent();
+        assertThat(actual).isEqualTo(expected);
     }
 
     @DataProvider(name = "tsvLines")
