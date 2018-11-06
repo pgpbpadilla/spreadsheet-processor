@@ -6,5 +6,5 @@ import org.pgpb.spreadsheet.Spreadsheet;
 public interface Evaluator {
     public String evaluateCell(Spreadsheet sheet, String address);
 
-    ImmutableList<String> evaluateSheet(Spreadsheet sheet);
+    ImmutableList<String> toTSVLines(Spreadsheet sheet);
 }

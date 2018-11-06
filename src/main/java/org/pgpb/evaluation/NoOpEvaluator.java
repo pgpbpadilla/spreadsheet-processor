@@ -12,7 +12,7 @@ public class NoOpEvaluator implements Evaluator {
     }
 
     @Override
-    public ImmutableList<String> evaluateSheet(Spreadsheet sheet) {
+    public ImmutableList<String> toTSVLines(Spreadsheet sheet) {
         return sheet.toTSVLines();
     }
 }

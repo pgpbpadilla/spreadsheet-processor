@@ -4,6 +4,12 @@ import com.google.common.collect.ImmutableList;
 import org.pgpb.spreadsheet.Cell;
 import org.pgpb.spreadsheet.Spreadsheet;
 
+import java.security.cert.CollectionCertStoreParameters;
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 public class ExpressionEvaluator implements Evaluator {
 
     @Override
@@ -13,8 +19,15 @@ public class ExpressionEvaluator implements Evaluator {
     }
 
     @Override
-    public ImmutableList<String> evaluateSheet(Spreadsheet sheet) {
-        return ImmutableList.of();
+    public ImmutableList<String> toTSVLines(Spreadsheet sheet) {
+        List<Cell[]> rows = sheet.getRows();
+        return rows.stream()
+            .map(cells -> Arrays.asList(cells).stream()
+                .map(Cell::getContent)
+                .map(content -> evaluateText(sheet, content))
+                .collect(toList()))
+            .map(strings -> String.join("\t", strings))
+            .collect(ImmutableList.toImmutableList());
     }
 
     private String evaluateText(Spreadsheet sheet, String text) {

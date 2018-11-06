@@ -83,6 +83,10 @@ public class Spreadsheet {
         return lines;
     }
 
+    public ImmutableList<Cell[]> getRows() {
+        return ImmutableList.copyOf(Arrays.asList(cells));
+    }
+
     private static class Dimensions {
         public final int rows;
         public final int columns;

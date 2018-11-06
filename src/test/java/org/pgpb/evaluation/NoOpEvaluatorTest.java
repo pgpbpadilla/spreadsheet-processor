@@ -6,7 +6,6 @@ import org.pgpb.spreadsheet.Spreadsheet;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.*;
 
 public class NoOpEvaluatorTest {
 
@@ -23,7 +22,7 @@ public class NoOpEvaluatorTest {
     }
 
     @Test
-    public void testEvaluateSheet() {
+    public void testToTSVLines() {
         Spreadsheet sheet = new Spreadsheet(1, 1);
         Cell [][] cells = new Cell[][] {
             {new Cell("1"), new Cell("-2")},
@@ -37,6 +36,6 @@ public class NoOpEvaluatorTest {
             "=1*B\tA"
         );
 
-        assertThat(evaluator.evaluateSheet(sheet)).isEqualTo(tsvLines);
+        assertThat(evaluator.toTSVLines(sheet)).isEqualTo(tsvLines);
     }
 }

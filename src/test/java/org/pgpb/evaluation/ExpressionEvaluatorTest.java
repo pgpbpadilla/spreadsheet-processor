@@ -1,10 +1,13 @@
 package org.pgpb.evaluation;
 
+import com.google.common.collect.ImmutableList;
 import org.pgpb.spreadsheet.Cell;
 import org.pgpb.spreadsheet.Spreadsheet;
-import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -51,7 +54,52 @@ public class ExpressionEvaluatorTest {
     }
 
     @Test
-    public void testEvaluateSheet() {
-        Assert.fail();
+    public void testEvaluateCellNestedReference(){
+        throw new NotImplementedException();
+    }
+
+    @DataProvider(name = "toTSVLinesData")
+    public Object [][] toTSVLinesData(){
+        return new Object[][] {
+            {
+                ImmutableList.of(
+                    "1\t1",
+                    "1"
+                ),
+                ImmutableList.of("1")
+            },
+            {
+                ImmutableList.of(
+                    "2\t2",
+                    "1\t2",
+                    "3\t4"
+                ),
+                ImmutableList.of(
+                    "1\t2",
+                    "3\t4"
+                )
+            },
+            {
+                ImmutableList.of(
+                    "2\t2",
+                    "=B1\t10",
+                    "30\t=A2"
+                ),
+                ImmutableList.of(
+                    "10\t10",
+                    "30\t30"
+                )
+            }
+        };
+    }
+
+    @Test(dataProvider = "toTSVLinesData")
+    public void testEvaluateSheet(
+        List<String> inputLines,
+        List<String> expected
+    ) {
+        Spreadsheet sheet = Spreadsheet.fromTsvLines(inputLines);
+        ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        assertThat(evaluator.toTSVLines(sheet)).isEqualTo(expected);
     }
 }
