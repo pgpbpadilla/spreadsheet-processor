@@ -1,24 +1,37 @@
 package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
-import org.pgpb.evaluation.ExpressionEvaluationError;
+import org.pgpb.evaluation.ExpressionError;
+import org.pgpb.evaluation.ExpressionEvaluator;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.shouldHaveThrown;
 
 
 public class SpreadsheetTest {
 
-    @Test
-    public void testSpreadsheet() {
-        Spreadsheet sheet = new Spreadsheet(1, 1);
+    @DataProvider(name = "dimensionsData")
+    public Object [][] dimensionsData() {
+        return new Object[][]{
+            {0, 0, new Spreadsheet.Dimensions(0, 0)},
+            {0, 1, new Spreadsheet.Dimensions(0, 0)},
+            {1, 0, new Spreadsheet.Dimensions(0, 0)},
+            {1, 1, new Spreadsheet.Dimensions(1, 1)}
+        };
+    };
+    @Test(dataProvider = "dimensionsData")
+    public void testSpreadsheet(
+        int rows,
+        int columns,
+        Spreadsheet.Dimensions expected
+    ) {
+        Spreadsheet sheet = new Spreadsheet(rows, columns);
 
-        assertThat(sheet.getRowCount()).isEqualTo(1);
-        assertThat(sheet.getColumnCount()).isEqualTo(1);
+        assertThat(sheet.getRowCount()).isEqualTo(expected.rows);
+        assertThat(sheet.getColumnCount()).isEqualTo(expected.columns);
     }
 
     @Test

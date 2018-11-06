@@ -1,16 +1,13 @@
 package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
-import org.pgpb.evaluation.ExpressionEvaluationError;
+import org.pgpb.evaluation.ExpressionError;
+import org.pgpb.evaluation.ExpressionEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.*;
 
@@ -23,9 +20,13 @@ public class Spreadsheet {
     private Cell[][] cells;
 
     public Spreadsheet(int rows, int columns) {
-        cells = new Cell[rows][];
-        for (int r = 0; r < rows; r++) {
-            cells[r] = new Cell[columns];
+        if (rows < 1 || columns < 1) {
+            cells = new Cell[0][0];
+        } else {
+            cells = new Cell[rows][];
+            for (int r = 0; r < rows; r++) {
+                cells[r] = new Cell[columns];
+            }
         }
     }
 
@@ -63,7 +64,18 @@ public class Spreadsheet {
     }
 
     public int getColumnCount() {
-        return cells[0].length;
+        if (hasRows() && hasColumns()) {
+            return cells[0].length;
+        }
+        return 0;
+    }
+
+    private boolean hasColumns() {
+        return null != cells[0];
+    }
+
+    private boolean hasRows() {
+        return cells.length > 0;
     }
 
     public Cell getCell(String address) {
