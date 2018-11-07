@@ -60,6 +60,9 @@ public class ExpressionEvaluator implements Evaluator {
 
         if (isReference(expression)) {
             String content = sheet.getCell(expression).getContent();
+            if (content.startsWith("#")) {
+                return content;
+            }
             return evaluateText(sheet, content);
         }
         return evaluateTerm(expression);
