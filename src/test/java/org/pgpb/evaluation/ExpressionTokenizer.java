@@ -9,12 +9,16 @@ public class ExpressionTokenizer {
     ImmutableList<Character> OPERATIONS = ImmutableList.of('+', '-', '*', '/');
 
     public List<String> tokenize(String expression) {
-        List<String> tokens = new ArrayList<>();
-
         Operator operator = nextOperator(expression);
+        if (operator.value == '\0') {
+            return ImmutableList.of(expression);
+        }
+
+        List<String> tokens = new ArrayList<>();
         tokens.add(expression.substring(0, operator.position));
         tokens.add(String.valueOf(operator.value));
-        tokens.add(expression.substring(operator.position + 1));
+        String remainder = expression.substring(operator.position + 1);
+        tokens.addAll(tokenize(remainder));
 
         return tokens;
     }

@@ -18,6 +18,11 @@ public class ExpressionTokenizerTest {
             {"4*5", ImmutableList.of("4", "*", "5")},
             {"4/5", ImmutableList.of("4", "/", "5")},
             {"4-5", ImmutableList.of("4", "-", "5")},
+            {"4+3-5", ImmutableList.of("4", "+", "3", "-", "5")},
+            {"1+2-3*4/5", ImmutableList.of(
+                "1", "+", "2", "-", "3", "*", "4", "/", "5"
+            )},
+            {"A1+B2-C3", ImmutableList.of("A1", "+", "B2", "-", "C3")},
         };
     }
 
