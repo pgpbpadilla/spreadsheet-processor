@@ -4,8 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.pgpb.spreadsheet.Cell;
 import org.pgpb.spreadsheet.Spreadsheet;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,22 +33,32 @@ public class ExpressionEvaluator implements Evaluator {
             return text;
         }
 
-        if (text.charAt(0) == '\'') {
+        if (isTextLabel(text)) {
             return text.substring(1);
         }
 
-        if (text.charAt(0) == '=') {
+        if (isExpression(text)) {
             return evaluateExpression(sheet, text.substring(1));
         }
 
         return evaluateTerm(text);
     }
 
-    private String evaluateExpression(
-        Spreadsheet sheet,
-        String expression
-    ) {
-        if (isReference(expression)){
+    private boolean isExpression(String text) {
+        return text.charAt(0) == '=';
+    }
+
+    private boolean isTextLabel(String text) {
+        return isTextLabel(text, '\'');
+    }
+
+    private boolean isTextLabel(String text, char c) {
+        return text.charAt(0) == c;
+    }
+
+    private String evaluateExpression(Spreadsheet sheet, String expression) {
+
+        if (isReference(expression)) {
             String content = sheet.getCell(expression).getContent();
             return evaluateText(sheet, content);
         }
