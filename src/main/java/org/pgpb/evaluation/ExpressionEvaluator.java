@@ -57,6 +57,8 @@ public class ExpressionEvaluator implements Evaluator {
     }
 
     private String evaluateExpression(Spreadsheet sheet, String expression) {
+        ExpressionTokenizer tokenizer = new ExpressionTokenizer();
+        List<String> tokens = tokenizer.tokenize(expression);
 
         if (isReference(expression)) {
             String content = sheet.getCell(expression).getContent();

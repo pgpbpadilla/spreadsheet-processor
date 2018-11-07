@@ -65,6 +65,18 @@ public class ExpressionEvaluatorTest {
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo("1");
     }
 
+    @Test
+    public void testEvaluateCellOperation() {
+        Cell [][] cells = new Cell[][] {
+            {new Cell("=2+4")}
+        };
+        Spreadsheet sheet = new Spreadsheet(1, 1);
+        sheet.setCells(cells);
+
+        ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo("6");
+    }
+
     @DataProvider(name = "toTSVLinesData")
     public Object [][] toTSVLinesData(){
         return new Object[][] {
