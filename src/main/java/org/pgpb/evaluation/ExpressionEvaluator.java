@@ -49,10 +49,15 @@ public class ExpressionEvaluator implements Evaluator {
         Spreadsheet sheet,
         String expression
     ) {
-        if (Character.isAlphabetic(expression.charAt(0))){
-            return sheet.getCell(expression).getContent();
+        if (isReference(expression)){
+            String content = sheet.getCell(expression).getContent();
+            return evaluateText(sheet, content);
         }
         return evaluateTerm(expression);
+    }
+
+    private boolean isReference(String expression) {
+        return Character.isAlphabetic(expression.charAt(0));
     }
 
     private static String evaluateTerm(String term) {

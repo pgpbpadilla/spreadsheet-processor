@@ -55,7 +55,14 @@ public class ExpressionEvaluatorTest {
 
     @Test
     public void testEvaluateCellNestedReference(){
-        throw new NotImplementedException();
+        Cell [][] cells = new Cell[][] {
+            {new Cell("=B1"), new Cell("=C1"), new Cell("=1")}
+        };
+        Spreadsheet sheet = new Spreadsheet(1, 3);
+        sheet.setCells(cells);
+
+        ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo("1");
     }
 
     @DataProvider(name = "toTSVLinesData")
