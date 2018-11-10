@@ -1,7 +1,6 @@
 package org.pgpb.evaluation;
 
 import com.google.common.collect.ImmutableList;
-import org.pgpb.spreadsheet.Cell;
 import org.pgpb.spreadsheet.Spreadsheet;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -9,7 +8,6 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 public class ExpressionSpreadsheetEvaluatorTest {
 
@@ -33,7 +31,7 @@ public class ExpressionSpreadsheetEvaluatorTest {
         Spreadsheet sheet = new Spreadsheet(1, 1);
         sheet.setCells(cells);
 
-        ExpressionSpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
+        SpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo(expected);
     }
 
@@ -44,7 +42,7 @@ public class ExpressionSpreadsheetEvaluatorTest {
         Spreadsheet sheet = new Spreadsheet(1, 2);
         sheet.setCells(cells);
 
-        ExpressionSpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
+        SpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo(expected);
     }
 
@@ -54,7 +52,7 @@ public class ExpressionSpreadsheetEvaluatorTest {
         Spreadsheet sheet = new Spreadsheet(1, 3);
         sheet.setCells(cells);
 
-        ExpressionSpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
+        SpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo("1");
     }
 
@@ -104,7 +102,7 @@ public class ExpressionSpreadsheetEvaluatorTest {
         Spreadsheet sheet = new Spreadsheet(1, 1);
         sheet.setCells(cells);
 
-        ExpressionSpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
+        SpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo(expected);
     }
 
@@ -149,7 +147,7 @@ public class ExpressionSpreadsheetEvaluatorTest {
         List<String> expected
     ) {
         Spreadsheet sheet = Spreadsheet.fromTsvLines(inputLines);
-        ExpressionSpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
+        SpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
         assertThat(evaluator.toTSVLines(sheet)).isEqualTo(expected);
     }
 }

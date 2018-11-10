@@ -14,10 +14,10 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-public class Cli {
+class Cli {
     private static final Logger LOGGER = LoggerFactory.getLogger(Cli.class);
-    private String[] args = null;
-    private Options options = new Options();
+    private final String[] args;
+    private final Options options = new Options();
 
     public Cli(String[] args) {
 
@@ -31,7 +31,7 @@ public class Cli {
     public void parse() {
         CommandLineParser parser = new DefaultParser();
 
-        CommandLine cmd = null;
+        CommandLine cmd;
         try {
             cmd = parser.parse(options, args);
 
@@ -46,14 +46,14 @@ public class Cli {
             }
 
         } catch (ParseException e) {
-            LOGGER.error("Failed to parse comand line properties");
+            LOGGER.error("Failed to parse command line properties");
             help();
         }
     }
 
     private void evaluateSpreadsheet(CommandLine cmd) {
         String filePath = cmd.getOptionValue("f");
-        Spreadsheet sheet = null;
+        Spreadsheet sheet;
 
         try(Stream<String> contents = Files.lines(Paths.get(filePath))){
             sheet = Spreadsheet.fromTsvLines(contents.collect(toList()));
@@ -65,7 +65,7 @@ public class Cli {
     }
 
     private void help() {
-        HelpFormatter formater = new HelpFormatter();
-        formater.printHelp("Main", options);
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("Main", options);
     }
 }

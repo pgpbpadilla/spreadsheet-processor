@@ -2,7 +2,7 @@ package org.pgpb.evaluation;
 
 import com.google.common.collect.ImmutableList;
 
-public class Operator {
+class Operator {
     public final int position;
     public final char value;
 
@@ -11,7 +11,7 @@ public class Operator {
         this.value = value;
     }
 
-    private static ImmutableList<Character> ALLOWED_OPERATORS =
+    private static final ImmutableList<Character> ALLOWED_OPERATORS =
         ImmutableList.of('+', '-', '*', '/');
 
     public static int evaluate(char operator, int a, int b) {

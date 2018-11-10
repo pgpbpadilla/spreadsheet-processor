@@ -15,7 +15,10 @@ public class Coordinate {
     public static Coordinate fromAddress(String address) {
         Pattern pattern = Pattern.compile("^([A-Z]+)(\\d+)$");
         Matcher m = pattern.matcher(address);
-        m.find();
+
+        if(!m.find()) {
+            throw new RuntimeException("Invalid address.");
+        }
 
         int row = Integer.parseInt(m.group(2)) - 1;
         int column = toIndex(m.group(1));

@@ -1,7 +1,6 @@
 package org.pgpb.evaluation;
 
 import com.google.common.collect.ImmutableList;
-import org.pgpb.spreadsheet.Cell;
 import org.pgpb.spreadsheet.Spreadsheet;
 
 import java.util.*;
@@ -20,7 +19,7 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
     public ImmutableList<String> toTSVLines(Spreadsheet sheet) {
         List<String[]> rows = sheet.getRows();
         return rows.stream()
-            .map(cells -> Arrays.asList(cells).stream()
+            .map(cells -> Arrays.stream(cells)
                 .map(content -> evaluateText(sheet, content))
                 .collect(toList()))
             .map(strings -> String.join("\t", strings))
@@ -51,11 +50,7 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
     }
 
     private static boolean isTextLabel(String text) {
-        return isTextLabel(text, '\'');
-    }
-
-    private static boolean isTextLabel(String text, char c) {
-        return text.charAt(0) == c;
+        return text.charAt(0) == '\'';
     }
 
     private static String evaluateExpression(
@@ -89,7 +84,6 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
                 int a = valuesStack.pop();
                 char operator = operatorsStack.pop().charAt(0);
                 valuesStack.push(Operator.evaluate(operator, a, b));
-                continue;
             }
         }
         return String.valueOf(valuesStack.pop());
@@ -130,7 +124,7 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
 
     private static String evaluateNonNegativeInteger(String term) {
         try {
-            Integer value = Integer.parseInt(term);
+            int value = Integer.parseInt(term);
             if (value < 0) {
                 return ValueError.NEGATIVE_NUMBER.toString();
             }

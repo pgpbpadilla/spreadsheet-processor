@@ -20,7 +20,8 @@ public class SpreadsheetTest {
             {1, 0, new Spreadsheet.Dimensions(0, 0)},
             {1, 1, new Spreadsheet.Dimensions(1, 1)}
         };
-    };
+    }
+
     @Test(dataProvider = "dimensionsData")
     public void testSpreadsheet(
         int rows,
@@ -50,7 +51,7 @@ public class SpreadsheetTest {
     @Test
     public void testGetCellInvalidAddress() {
         Spreadsheet sheet = new Spreadsheet(0, 0);
-        String content = sheet.getContent("IvalidAddress");
+        String content = sheet.getContent("InvalidAddress");
         String expected = ValueError.INVALID_ADDRESS_FORMAT.toString();
         assertThat(content).isEqualTo(expected);
     }

@@ -1,7 +1,6 @@
 package org.pgpb.evaluation;
 
 import com.google.common.collect.ImmutableList;
-import org.pgpb.spreadsheet.Cell;
 import org.pgpb.spreadsheet.Spreadsheet;
 import org.testng.annotations.Test;
 

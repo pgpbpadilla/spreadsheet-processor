@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExpressionTokenizer {
+class ExpressionTokenizer {
 
     public List<String> tokenize(String expression) {
         Operator operator = nextOperator(expression);
