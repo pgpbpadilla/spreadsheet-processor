@@ -1,7 +1,7 @@
 package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
-import org.pgpb.evaluation.ExpressionError;
+import org.pgpb.evaluation.ValueError;
 import org.pgpb.evaluation.ExpressionEvaluator;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -53,14 +53,14 @@ public class SpreadsheetTest {
         Spreadsheet sheet = new Spreadsheet(0, 0);
         String content = sheet.getCell("IvalidAddress").getContent();
         String expected =
-            ExpressionEvaluator.formatError(ExpressionError.INVALID_ADDRESS_FORMAT);
+            ExpressionEvaluator.formatError(ValueError.INVALID_ADDRESS_FORMAT);
         assertThat(content).isEqualTo(expected);
     }
 
     @Test
     public void testGetCellNotFound() {
         Spreadsheet sheet = new Spreadsheet(0, 0);
-        String expected = "#" + String.valueOf(ExpressionError.CELL_NOT_FOUND);
+        String expected = "#" + String.valueOf(ValueError.CELL_NOT_FOUND);
         String actual = sheet.getCell("A1").getContent();
         assertThat(actual).isEqualTo(expected);
     }

@@ -1,9 +1,8 @@
 package org.pgpb.evaluation;
 
-public enum ExpressionError {
+public enum ValueError {
     INVALID_FORMAT ("Invalid format."),
     NEGATIVE_NUMBER ("Only positive numbers are allowed."),
-    // TODO: These two don't really belong here, create SpreadSheetError?
     INVALID_ADDRESS_FORMAT("Invalid cell address format."),
     CELL_NOT_FOUND ("Could not resolve cell address."),
     INVALID_EXPRESSION("Invalid expression."),
@@ -11,7 +10,7 @@ public enum ExpressionError {
 
     private final String message;
 
-    ExpressionError(String message) {
+    ValueError(String message) {
         this.message = message;
     }
 

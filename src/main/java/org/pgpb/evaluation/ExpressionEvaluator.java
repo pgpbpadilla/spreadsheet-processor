@@ -74,7 +74,7 @@ public class ExpressionEvaluator implements Evaluator {
             .anyMatch(evalError);
 
         if (hasErrors) {
-            return formatError(ExpressionError.INVALID_EXPRESSION);
+            return formatError(ValueError.INVALID_EXPRESSION);
         }
 
         Deque<Integer> valuesStack = new ArrayDeque<>();
@@ -112,7 +112,7 @@ public class ExpressionEvaluator implements Evaluator {
             return a/b;
         }
         throw new RuntimeException(
-            String.valueOf(ExpressionError.UNSUPPORTED_OPERATION)
+            String.valueOf(ValueError.UNSUPPORTED_OPERATION)
         );
     }
 
@@ -144,7 +144,7 @@ public class ExpressionEvaluator implements Evaluator {
     private static String evaluateTerm(Spreadsheet sheet, String term) {
         if ("".equals(term)) {
             return ExpressionEvaluator.formatError(
-                ExpressionError.INVALID_FORMAT
+                ValueError.INVALID_FORMAT
             );
         }
         if (isReference(term)) {
@@ -157,11 +157,11 @@ public class ExpressionEvaluator implements Evaluator {
         try {
             Integer value = Integer.parseInt(term);
             if (value < 0) {
-                return formatError(ExpressionError.NEGATIVE_NUMBER);
+                return formatError(ValueError.NEGATIVE_NUMBER);
             }
             return term;
         } catch (NumberFormatException e) {
-            return formatError(ExpressionError.INVALID_FORMAT);
+            return formatError(ValueError.INVALID_FORMAT);
         }
     }
 
@@ -173,7 +173,7 @@ public class ExpressionEvaluator implements Evaluator {
         return evaluateText(sheet, content);
     }
 
-    public static String formatError(ExpressionError error) {
+    public static String formatError(ValueError error) {
         return "#" + String.valueOf(error);
     }
 }

@@ -5,7 +5,6 @@ import org.pgpb.spreadsheet.Cell;
 import org.pgpb.spreadsheet.Spreadsheet;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
@@ -21,11 +20,11 @@ public class ExpressionEvaluatorTest {
             {"1", "1"},
             {"=1", "1"},
             {"'Text", "Text"},
-            {"-1", "#" + ExpressionError.NEGATIVE_NUMBER},
-            {"=-1", "#" + ExpressionError.INVALID_EXPRESSION},
-            {"A", "#" + ExpressionError.INVALID_FORMAT},
-            {"=A", "#" + ExpressionError.INVALID_EXPRESSION},
-            {"='Text", "#" + ExpressionError.INVALID_EXPRESSION},
+            {"-1", "#" + ValueError.NEGATIVE_NUMBER},
+            {"=-1", "#" + ValueError.INVALID_EXPRESSION},
+            {"A", "#" + ValueError.INVALID_FORMAT},
+            {"=A", "#" + ValueError.INVALID_EXPRESSION},
+            {"='Text", "#" + ValueError.INVALID_EXPRESSION},
         };
     }
     @Test(dataProvider = "termData")

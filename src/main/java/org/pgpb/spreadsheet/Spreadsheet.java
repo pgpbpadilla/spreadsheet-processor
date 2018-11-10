@@ -1,7 +1,7 @@
 package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
-import org.pgpb.evaluation.ExpressionError;
+import org.pgpb.evaluation.ValueError;
 import org.pgpb.evaluation.ExpressionEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,12 +84,12 @@ public class Spreadsheet {
             coordinate = Coordinate.fromAddress(address);
         } catch (Exception e) {
             return new Cell(
-                ExpressionEvaluator.formatError(ExpressionError.INVALID_ADDRESS_FORMAT)
+                ExpressionEvaluator.formatError(ValueError.INVALID_ADDRESS_FORMAT)
             );
         }
         if (!cellExists(coordinate)) {
             return new Cell(
-                ExpressionEvaluator.formatError(ExpressionError.CELL_NOT_FOUND)
+                ExpressionEvaluator.formatError(ValueError.CELL_NOT_FOUND)
             );
         }
         return cells[coordinate.row][coordinate.column];
