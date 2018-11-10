@@ -65,16 +65,30 @@ public class ExpressionEvaluatorTest {
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo("1");
     }
 
-    @Test
-    public void testEvaluateCellOperation() {
-        Cell [][] cells = new Cell[][] {
-            {new Cell("=2+4")}
+    @DataProvider(name = "operationsData")
+    public Object[][] operationsData(){
+        return new Object[][] {
+            {
+                new Cell [][] {
+                    {new Cell("=2+4")}
+                },
+                "6.0"
+            },
+            {
+                new Cell [][] {
+                    {new Cell("=2+4+3.5+3.1")}
+                },
+                "12.6"
+            }
         };
+    }
+    @Test(dataProvider = "operationsData")
+    public void testEvaluateCellOperation(Cell [][] cells, String expected) {
         Spreadsheet sheet = new Spreadsheet(1, 1);
         sheet.setCells(cells);
 
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
-        assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo("6.0");
+        assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo(expected);
     }
 
     @DataProvider(name = "toTSVLinesData")

@@ -79,6 +79,9 @@ public class ExpressionEvaluator implements Evaluator {
         boolean hasErrors = tokenValues.stream()
             .anyMatch(evalError);
 
+        if (hasErrors) {
+            return formatError(ExpressionError.INVALID_EXPRESSION);
+        }
 
         Deque<Double> valuesStack = new ArrayDeque<>();
         Deque<String> operatorsStack = new ArrayDeque<>();
@@ -115,7 +118,7 @@ public class ExpressionEvaluator implements Evaluator {
 
     private static String evaluateTerm(String term) {
         try {
-            Integer value = Integer.parseInt(term);
+            Double value = Double.parseDouble(term);
             if (value < 0) {
                 return formatError(ExpressionError.NEGATIVE_NUMBER);
             }
