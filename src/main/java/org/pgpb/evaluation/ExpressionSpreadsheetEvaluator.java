@@ -66,13 +66,12 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
     ) {
         ExpressionTokenizer tokenizer = new ExpressionTokenizer();
         List<String> tokens = tokenizer.tokenize(expression);
-        List<String> tokenValues = tokens.stream()
+        List<String> values = tokens.stream()
             .map(t -> evaluateToken(sheet, t))
             .collect(toList());
-        Predicate<String> evalError = s -> s.startsWith("#");
-        boolean hasErrors = tokenValues.stream()
-            .anyMatch(evalError);
 
+        Predicate<String> valueError = v -> v.startsWith("#");
+        boolean hasErrors = values.stream().anyMatch(valueError);
         if (hasErrors) {
             return formatError(ValueError.INVALID_EXPRESSION);
         }
@@ -85,7 +84,7 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
                 continue;
             }
 
-            valuesStack.push(Integer.parseInt(tv));
+            valuesStack.push(Integer.parseInt(v));
 
             if (!operatorsStack.isEmpty()) {
                 int b = valuesStack.pop();
