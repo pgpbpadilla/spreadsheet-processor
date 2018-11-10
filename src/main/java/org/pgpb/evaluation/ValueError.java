@@ -14,9 +14,8 @@ public enum ValueError {
         this.message = message;
     }
 
-
     @Override
     public String toString() {
-        return message;
+        return "#" + message;
     }
 }

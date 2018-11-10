@@ -2,7 +2,6 @@ package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
 import org.pgpb.evaluation.ValueError;
-import org.pgpb.evaluation.ExpressionSpreadsheetEvaluator;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -37,32 +36,30 @@ public class SpreadsheetTest {
     @Test
     public void testGetCell() {
         Spreadsheet sheet = new Spreadsheet(1, 1);
-        Cell[][] cells = {
-            {new Cell("1"), new Cell("2")},
-            {new Cell("3"), new Cell("4")},
-            {new Cell("5"), new Cell("6")}
+        String[][] cells = {
+            {"1", "2"},
+            {"3", "4"},
+            {"5", "6"}
         };
         sheet.setCells(cells);
 
-        assertThat(sheet.getCell("A1").getContent()).isEqualTo("1");
-        assertThat(sheet.getCell("B3").getContent()).isEqualTo("6");
+        assertThat(sheet.getContent("A1")).isEqualTo("1");
+        assertThat(sheet.getContent("B3")).isEqualTo("6");
     }
 
     @Test
     public void testGetCellInvalidAddress() {
         Spreadsheet sheet = new Spreadsheet(0, 0);
-        String content = sheet.getCell("IvalidAddress").getContent();
-        String expected =
-            ExpressionSpreadsheetEvaluator.formatError(ValueError.INVALID_ADDRESS_FORMAT);
+        String content = sheet.getContent("IvalidAddress");
+        String expected = ValueError.INVALID_ADDRESS_FORMAT.toString();
         assertThat(content).isEqualTo(expected);
     }
 
     @Test
     public void testGetCellNotFound() {
         Spreadsheet sheet = new Spreadsheet(0, 0);
-        String expected = "#" + String.valueOf(ValueError.CELL_NOT_FOUND);
-        String actual = sheet.getCell("A1").getContent();
-        assertThat(actual).isEqualTo(expected);
+        String actual = sheet.getContent("A1");
+        assertThat(actual).isEqualTo(ValueError.CELL_NOT_FOUND.toString());
     }
 
     @DataProvider(name = "tsvLines")
@@ -128,21 +125,17 @@ public class SpreadsheetTest {
     public Object [][] cellData(){
         return new Object[][]{
             {
-                new Cell[][]{
-                    {new Cell("1")}
-                },
+                new String[][]{{"1"}},
                 ImmutableList.of("1")
             },
             {
-                new Cell[][]{
-                    {new Cell("1"), new Cell("=1*A")}
-                },
+                new String[][]{{"1", "=1*A"}},
                 ImmutableList.of("1\t=1*A")
             },
             {
-                new Cell[][]{
-                    {new Cell("1"), new Cell("=1*A")},
-                    {new Cell("-10"), new Cell("B3")}
+                new String[][]{
+                    {"1", "=1*A"},
+                    {"-10", "B3"}
                 },
                 ImmutableList.of(
                     "1\t=1*A",
@@ -152,7 +145,7 @@ public class SpreadsheetTest {
         };
     }
     @Test(dataProvider = "cellData")
-    public void testToTSVLines(Cell [][] cells, List<String> expected) {
+    public void testToTSVLines(String [][] cells, List<String> expected) {
         Spreadsheet sheet = new Spreadsheet(1, 1);
         sheet.setCells(cells);
         assertThat(sheet.toTSVLines()).isEqualTo(expected);

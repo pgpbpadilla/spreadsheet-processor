@@ -20,18 +20,16 @@ public class ExpressionSpreadsheetEvaluatorTest {
             {"1", "1"},
             {"=1", "1"},
             {"'Text", "Text"},
-            {"-1", "#" + ValueError.NEGATIVE_NUMBER},
-            {"=-1", "#" + ValueError.INVALID_EXPRESSION},
-            {"A", "#" + ValueError.INVALID_FORMAT},
-            {"=A", "#" + ValueError.INVALID_EXPRESSION},
-            {"='Text", "#" + ValueError.INVALID_EXPRESSION},
+            {"-1", ValueError.NEGATIVE_NUMBER.toString()},
+            {"=-1", ValueError.INVALID_EXPRESSION.toString()},
+            {"A", ValueError.INVALID_FORMAT.toString()},
+            {"=A", ValueError.INVALID_EXPRESSION.toString()},
+            {"='Text", ValueError.INVALID_EXPRESSION.toString()},
         };
     }
     @Test(dataProvider = "termData")
     public void testEvaluateCellWithTerm(String content, String expected) {
-        Cell [][] cells = new Cell[][] {
-            {new Cell(content)}
-        };
+        String [][] cells = new String[][] {{content}};
         Spreadsheet sheet = new Spreadsheet(1, 1);
         sheet.setCells(cells);
 
@@ -42,9 +40,7 @@ public class ExpressionSpreadsheetEvaluatorTest {
     @Test
     public void testEvaluateCellReference() {
         String expected = "123";
-        Cell [][] cells = new Cell[][] {
-            {new Cell("=B1"), new Cell(expected)}
-        };
+        String [][] cells = new String[][] {{"=B1", expected}};
         Spreadsheet sheet = new Spreadsheet(1, 2);
         sheet.setCells(cells);
 
@@ -54,9 +50,7 @@ public class ExpressionSpreadsheetEvaluatorTest {
 
     @Test
     public void testEvaluateCellNestedReference(){
-        Cell [][] cells = new Cell[][] {
-            {new Cell("=B1"), new Cell("=C1"), new Cell("=1")}
-        };
+        String [][] cells = new String[][] {{"=B1", "=C1", "=1"}};
         Spreadsheet sheet = new Spreadsheet(1, 3);
         sheet.setCells(cells);
 
@@ -68,45 +62,45 @@ public class ExpressionSpreadsheetEvaluatorTest {
     public Object[][] operationsData(){
         return new Object[][] {
             {
-                new Cell [][] {
-                    {new Cell("=2+4")}
+                new String [][] {
+                    {"=2+4"}
                 },
                 "6"
             },
             {
-                new Cell [][] {
-                    {new Cell("=5-4")}
+                new String [][] {
+                    {"=5-4"}
                 },
                 "1"
             },
             {
-                new Cell [][] {
-                    {new Cell("=5*4")}
+                new String [][] {
+                    {"=5*4"}
                 },
                 "20"
             },
             {
-                new Cell [][] {
-                    {new Cell("=20/4")}
+                new String [][] {
+                    {"=20/4"}
                 },
                 "5"
             },
             {
-                new Cell [][] {
-                    {new Cell("=1+2-3*3/3")}
+                new String [][] {
+                    {"=1+2-3*3/3"}
                 },
                 "0"
             },
             {
-                new Cell [][] {
-                    {new Cell("=20/5*3+2-1")}
+                new String [][] {
+                    {"=20/5*3+2-1"}
                 },
                 "13"
             }
         };
     }
     @Test(dataProvider = "operationsData")
-    public void testEvaluateCellOperation(Cell [][] cells, String expected) {
+    public void testEvaluateCellOperation(String [][] cells, String expected) {
         Spreadsheet sheet = new Spreadsheet(1, 1);
         sheet.setCells(cells);
 

@@ -13,16 +13,14 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
 
     @Override
     public String evaluateCell(Spreadsheet sheet, String address) {
-        Cell cell = sheet.getCell(address);
-        return evaluateText(sheet, cell.getContent());
+        return evaluateText(sheet, sheet.getContent(address));
     }
 
     @Override
     public ImmutableList<String> toTSVLines(Spreadsheet sheet) {
-        List<Cell[]> rows = sheet.getRows();
+        List<String[]> rows = sheet.getRows();
         return rows.stream()
             .map(cells -> Arrays.asList(cells).stream()
-                .map(Cell::getContent)
                 .map(content -> evaluateText(sheet, content))
                 .collect(toList()))
             .map(strings -> String.join("\t", strings))
@@ -73,7 +71,7 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
         Predicate<String> valueError = v -> v.startsWith("#");
         boolean hasErrors = values.stream().anyMatch(valueError);
         if (hasErrors) {
-            return formatError(ValueError.INVALID_EXPRESSION);
+            return ValueError.INVALID_EXPRESSION.toString();
         }
 
         Deque<Integer> valuesStack = new ArrayDeque<>();
@@ -122,9 +120,7 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
 
     private static String evaluateTerm(Spreadsheet sheet, String term) {
         if ("".equals(term)) {
-            return ExpressionSpreadsheetEvaluator.formatError(
-                ValueError.INVALID_FORMAT
-            );
+            return ValueError.INVALID_FORMAT.toString();
         }
         if (isReference(term)) {
             return evaluateReference(sheet, term);
@@ -136,23 +132,20 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
         try {
             Integer value = Integer.parseInt(term);
             if (value < 0) {
-                return formatError(ValueError.NEGATIVE_NUMBER);
+                return ValueError.NEGATIVE_NUMBER.toString();
             }
             return term;
         } catch (NumberFormatException e) {
-            return formatError(ValueError.INVALID_FORMAT);
+            return ValueError.INVALID_FORMAT.toString();
         }
     }
 
     private static String evaluateReference(Spreadsheet sheet, String address) {
-        String content = sheet.getCell(address).getContent();
+        String content = sheet.getContent(address);
         if (content.startsWith("#")) {
             return content;
         }
         return evaluateText(sheet, content);
     }
 
-    public static String formatError(ValueError error) {
-        return "#" + String.valueOf(error);
-    }
 }

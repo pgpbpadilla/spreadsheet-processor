@@ -2,7 +2,6 @@ package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
 import org.pgpb.evaluation.ValueError;
-import org.pgpb.evaluation.ExpressionSpreadsheetEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,15 +16,15 @@ import static java.util.stream.Collectors.*;
 public class Spreadsheet {
     private static final Logger LOGGER = LoggerFactory.getLogger(Spreadsheet.class);
     private Dimensions dimensions;
-    private Cell[][] cells;
+    private String[][] cells;
 
     public Spreadsheet(int rows, int columns) {
         if (rows < 1 || columns < 1) {
-            cells = new Cell[0][0];
+            cells = new String[0][0];
         } else {
-            cells = new Cell[rows][];
+            cells = new String[rows][];
             for (int r = 0; r < rows; r++) {
-                cells[r] = new Cell[columns];
+                cells[r] = new String[columns];
             }
         }
     }
@@ -45,14 +44,13 @@ public class Spreadsheet {
         String[] header = lines.get(0).split("\\t");
         Dimensions dimensions = parseHeader(header);
 
-        Cell [][] cells = lines.stream()
+        String [][] cells = lines.stream()
             .skip(1)
             .map(l -> l.split("\\t"))
             .map(Arrays::asList)
             .map(entries -> entries.stream()
-                .map(Cell::new)
-                .toArray(Cell[]::new))
-            .toArray(Cell[][]::new);
+                .toArray(String[]::new))
+            .toArray(String[][]::new);
 
         Spreadsheet spreadsheet = new Spreadsheet(dimensions.rows, dimensions.columns);
         spreadsheet.setCells(cells);
@@ -78,19 +76,15 @@ public class Spreadsheet {
         return cells.length > 0;
     }
 
-    public Cell getCell(String address) {
+    public String getContent(String address) {
         Coordinate coordinate = null;
         try {
             coordinate = Coordinate.fromAddress(address);
         } catch (Exception e) {
-            return new Cell(
-                ExpressionSpreadsheetEvaluator.formatError(ValueError.INVALID_ADDRESS_FORMAT)
-            );
+            return ValueError.INVALID_ADDRESS_FORMAT.toString();
         }
         if (!cellExists(coordinate)) {
-            return new Cell(
-                ExpressionSpreadsheetEvaluator.formatError(ValueError.CELL_NOT_FOUND)
-            );
+            return ValueError.CELL_NOT_FOUND.toString();
         }
         return cells[coordinate.row][coordinate.column];
     }
@@ -111,7 +105,7 @@ public class Spreadsheet {
         return true;
     }
 
-    public void setCells(Cell[][] cells) {
+    public void setCells(String[][] cells) {
         this.cells = cells;
     }
 
@@ -119,13 +113,12 @@ public class Spreadsheet {
         ImmutableList lines = Arrays.asList(cells).stream()
             .map(Arrays::asList)
             .map(cellRow -> cellRow.stream()
-                .map(Cell::getContent)
                 .collect(joining("\t"))
             ).collect(ImmutableList.toImmutableList());
         return lines;
     }
 
-    public ImmutableList<Cell[]> getRows() {
+    public ImmutableList<String[]> getRows() {
         return ImmutableList.copyOf(Arrays.asList(cells));
     }
 
