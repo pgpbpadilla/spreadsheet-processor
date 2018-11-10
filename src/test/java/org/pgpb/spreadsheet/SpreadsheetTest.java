@@ -2,7 +2,7 @@ package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
 import org.pgpb.evaluation.ValueError;
-import org.pgpb.evaluation.ExpressionEvaluator;
+import org.pgpb.evaluation.ExpressionSpreadsheetEvaluator;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -53,7 +53,7 @@ public class SpreadsheetTest {
         Spreadsheet sheet = new Spreadsheet(0, 0);
         String content = sheet.getCell("IvalidAddress").getContent();
         String expected =
-            ExpressionEvaluator.formatError(ValueError.INVALID_ADDRESS_FORMAT);
+            ExpressionSpreadsheetEvaluator.formatError(ValueError.INVALID_ADDRESS_FORMAT);
         assertThat(content).isEqualTo(expected);
     }
 

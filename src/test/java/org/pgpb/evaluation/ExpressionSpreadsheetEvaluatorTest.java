@@ -11,7 +11,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-public class ExpressionEvaluatorTest {
+public class ExpressionSpreadsheetEvaluatorTest {
 
     @DataProvider(name = "termData")
     public Object[][] evaluateCellWithTerm(){
@@ -35,7 +35,7 @@ public class ExpressionEvaluatorTest {
         Spreadsheet sheet = new Spreadsheet(1, 1);
         sheet.setCells(cells);
 
-        ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        ExpressionSpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo(expected);
     }
 
@@ -48,7 +48,7 @@ public class ExpressionEvaluatorTest {
         Spreadsheet sheet = new Spreadsheet(1, 2);
         sheet.setCells(cells);
 
-        ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        ExpressionSpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo(expected);
     }
 
@@ -60,7 +60,7 @@ public class ExpressionEvaluatorTest {
         Spreadsheet sheet = new Spreadsheet(1, 3);
         sheet.setCells(cells);
 
-        ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        ExpressionSpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo("1");
     }
 
@@ -110,7 +110,7 @@ public class ExpressionEvaluatorTest {
         Spreadsheet sheet = new Spreadsheet(1, 1);
         sheet.setCells(cells);
 
-        ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        ExpressionSpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo(expected);
     }
 
@@ -155,7 +155,7 @@ public class ExpressionEvaluatorTest {
         List<String> expected
     ) {
         Spreadsheet sheet = Spreadsheet.fromTsvLines(inputLines);
-        ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        ExpressionSpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
         assertThat(evaluator.toTSVLines(sheet)).isEqualTo(expected);
     }
 }

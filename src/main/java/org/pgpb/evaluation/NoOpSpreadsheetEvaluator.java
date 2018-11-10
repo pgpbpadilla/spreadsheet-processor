@@ -3,9 +3,7 @@ package org.pgpb.evaluation;
 import com.google.common.collect.ImmutableList;
 import org.pgpb.spreadsheet.Spreadsheet;
 
-import java.util.Collections;
-
-public class NoOpEvaluator implements Evaluator {
+public class NoOpSpreadsheetEvaluator implements SpreadsheetEvaluator {
     @Override
     public String evaluateCell(Spreadsheet sheet, String address) {
         return sheet.getCell(address).getContent();

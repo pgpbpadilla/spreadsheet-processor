@@ -2,7 +2,7 @@ package org.pgpb.spreadsheet;
 
 import com.google.common.collect.ImmutableList;
 import org.pgpb.evaluation.ValueError;
-import org.pgpb.evaluation.ExpressionEvaluator;
+import org.pgpb.evaluation.ExpressionSpreadsheetEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,12 +84,12 @@ public class Spreadsheet {
             coordinate = Coordinate.fromAddress(address);
         } catch (Exception e) {
             return new Cell(
-                ExpressionEvaluator.formatError(ValueError.INVALID_ADDRESS_FORMAT)
+                ExpressionSpreadsheetEvaluator.formatError(ValueError.INVALID_ADDRESS_FORMAT)
             );
         }
         if (!cellExists(coordinate)) {
             return new Cell(
-                ExpressionEvaluator.formatError(ValueError.CELL_NOT_FOUND)
+                ExpressionSpreadsheetEvaluator.formatError(ValueError.CELL_NOT_FOUND)
             );
         }
         return cells[coordinate.row][coordinate.column];

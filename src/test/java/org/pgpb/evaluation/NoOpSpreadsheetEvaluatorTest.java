@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NoOpEvaluatorTest {
+public class NoOpSpreadsheetEvaluatorTest {
 
     @Test
     public void testEvaluateCell() {
@@ -16,7 +16,7 @@ public class NoOpEvaluatorTest {
             {new Cell("1")}
         };
         sheet.setCells(cells);
-        NoOpEvaluator evaluator = new NoOpEvaluator();
+        NoOpSpreadsheetEvaluator evaluator = new NoOpSpreadsheetEvaluator();
 
         assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo("1");
     }
@@ -29,7 +29,7 @@ public class NoOpEvaluatorTest {
             {new Cell("=1*B"), new Cell("A")}
         };
         sheet.setCells(cells);
-        NoOpEvaluator evaluator = new NoOpEvaluator();
+        NoOpSpreadsheetEvaluator evaluator = new NoOpSpreadsheetEvaluator();
 
         ImmutableList<String> tsvLines = ImmutableList.of(
             "1\t-2",

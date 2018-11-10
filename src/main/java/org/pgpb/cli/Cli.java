@@ -1,9 +1,8 @@
 package org.pgpb.cli;
 
 import org.apache.commons.cli.*;
-import org.pgpb.evaluation.Evaluator;
-import org.pgpb.evaluation.ExpressionEvaluator;
-import org.pgpb.evaluation.NoOpEvaluator;
+import org.pgpb.evaluation.SpreadsheetEvaluator;
+import org.pgpb.evaluation.ExpressionSpreadsheetEvaluator;
 import org.pgpb.spreadsheet.Spreadsheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +57,7 @@ public class Cli {
 
         try(Stream<String> contents = Files.lines(Paths.get(filePath))){
             sheet = Spreadsheet.fromTsvLines(contents.collect(toList()));
-            Evaluator evaluator = new ExpressionEvaluator();
+            SpreadsheetEvaluator evaluator = new ExpressionSpreadsheetEvaluator();
             evaluator.toTSVLines(sheet).forEach(System.out::println);
         } catch (IOException e) {
             LOGGER.error("Could not read input file: " + filePath);

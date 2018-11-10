@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
-public class ExpressionEvaluator implements Evaluator {
+public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
 
     @Override
     public String evaluateCell(Spreadsheet sheet, String address) {
@@ -143,7 +143,7 @@ public class ExpressionEvaluator implements Evaluator {
 
     private static String evaluateTerm(Spreadsheet sheet, String term) {
         if ("".equals(term)) {
-            return ExpressionEvaluator.formatError(
+            return ExpressionSpreadsheetEvaluator.formatError(
                 ValueError.INVALID_FORMAT
             );
         }
