@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionTokenizer {
-    ImmutableList<Character> OPERATIONS = ImmutableList.of('+', '-', '*', '/');
+    public static ImmutableList<Character> OPERATIONS =
+        ImmutableList.of('+', '-', '*', '/');
 
     public List<String> tokenize(String expression) {
         Operator operator = nextOperator(expression);

@@ -74,7 +74,7 @@ public class ExpressionEvaluatorTest {
         sheet.setCells(cells);
 
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
-        assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo("6");
+        assertThat(evaluator.evaluateCell(sheet, "A1")).isEqualTo("6.0");
     }
 
     @DataProvider(name = "toTSVLinesData")

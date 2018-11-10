@@ -5,6 +5,7 @@ import org.pgpb.spreadsheet.Cell;
 import org.pgpb.spreadsheet.Spreadsheet;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
@@ -37,6 +38,10 @@ public class ExpressionEvaluator implements Evaluator {
             return text.substring(1);
         }
 
+        if (isOperator(text)) {
+            return text;
+        }
+
         if (isExpression(text)) {
             return evaluateExpression(sheet, text.substring(1));
         }
@@ -57,9 +62,6 @@ public class ExpressionEvaluator implements Evaluator {
     }
 
     private String evaluateExpression(Spreadsheet sheet, String expression) {
-        ExpressionTokenizer tokenizer = new ExpressionTokenizer();
-        List<String> tokens = tokenizer.tokenize(expression);
-
         if (isReference(expression)) {
             String content = sheet.getCell(expression).getContent();
             if (content.startsWith("#")) {
@@ -67,7 +69,44 @@ public class ExpressionEvaluator implements Evaluator {
             }
             return evaluateText(sheet, content);
         }
-        return evaluateTerm(expression);
+
+        ExpressionTokenizer tokenizer = new ExpressionTokenizer();
+        List<String> tokens = tokenizer.tokenize(expression);
+        List<String> tokenValues = tokens.stream()
+            .map(t -> evaluateText(sheet, t))
+            .collect(toList());
+        Predicate<String> evalError = s -> s.startsWith("#");
+        boolean hasErrors = tokenValues.stream()
+            .anyMatch(evalError);
+
+
+        Deque<Double> valuesStack = new ArrayDeque<>();
+        Deque<String> operatorsStack = new ArrayDeque<>();
+        for (String tv : tokenValues) {
+            if (isOperator(tv)) {
+                operatorsStack.push(tv);
+                continue;
+            }
+
+            valuesStack.push(Double.parseDouble(tv));
+
+            if (!operatorsStack.isEmpty()) {
+                double a = valuesStack.pop();
+                double b = valuesStack.pop();
+                String operation = operatorsStack.pop();
+                valuesStack.push(evaluateOperation(operation, a, b));
+                continue;
+            }
+        }
+        return String.valueOf(valuesStack.pop());
+    }
+
+    private double evaluateOperation(String operation, double a, double b) {
+        return a+b;
+    }
+
+    private boolean isOperator(String token) {
+        return ExpressionTokenizer.OPERATIONS.contains(token.toCharArray()[0]);
     }
 
     private boolean isReference(String expression) {
