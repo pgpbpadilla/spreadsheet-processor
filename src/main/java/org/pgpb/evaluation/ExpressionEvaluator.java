@@ -94,8 +94,8 @@ public class ExpressionEvaluator implements Evaluator {
             valuesStack.push(Double.parseDouble(tv));
 
             if (!operatorsStack.isEmpty()) {
-                double a = valuesStack.pop();
                 double b = valuesStack.pop();
+                double a = valuesStack.pop();
                 String operation = operatorsStack.pop();
                 valuesStack.push(evaluateOperation(operation, a, b));
                 continue;
@@ -105,7 +105,21 @@ public class ExpressionEvaluator implements Evaluator {
     }
 
     private double evaluateOperation(String operation, double a, double b) {
-        return a+b;
+        if (operation.equals("+")){
+            return a+b;
+        }
+        if (operation.equals("-")){
+            return a-b;
+        }
+        if (operation.equals("*")){
+            return a*b;
+        }
+        if (operation.equals("/")){
+            return a/b;
+        }
+        throw new RuntimeException(
+            String.valueOf(ExpressionError.UNSUPPORTED_OPERATION)
+        );
     }
 
     private boolean isOperator(String token) {

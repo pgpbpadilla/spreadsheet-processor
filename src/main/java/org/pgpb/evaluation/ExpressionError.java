@@ -6,7 +6,8 @@ public enum ExpressionError {
     // TODO: These two don't really belong here, create SpreadSheetError?
     INVALID_ADDRESS_FORMAT("Invalid cell address format."),
     CELL_NOT_FOUND ("Could not resolve cell address."),
-    INVALID_EXPRESSION("Invalid expression.");
+    INVALID_EXPRESSION("Invalid expression."),
+    UNSUPPORTED_OPERATION("Operation not supported.");
 
     private final String message;
 
