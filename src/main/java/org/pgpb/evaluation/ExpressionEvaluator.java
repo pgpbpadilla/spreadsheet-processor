@@ -77,7 +77,7 @@ public class ExpressionEvaluator implements Evaluator {
             return formatError(ExpressionError.INVALID_EXPRESSION);
         }
 
-        Deque<Double> valuesStack = new ArrayDeque<>();
+        Deque<Integer> valuesStack = new ArrayDeque<>();
         Deque<String> operatorsStack = new ArrayDeque<>();
         for (String tv : tokenValues) {
             if (isOperator(tv)) {
@@ -85,11 +85,11 @@ public class ExpressionEvaluator implements Evaluator {
                 continue;
             }
 
-            valuesStack.push(Double.parseDouble(tv));
+            valuesStack.push(Integer.parseInt(tv));
 
             if (!operatorsStack.isEmpty()) {
-                double b = valuesStack.pop();
-                double a = valuesStack.pop();
+                int b = valuesStack.pop();
+                int a = valuesStack.pop();
                 String operation = operatorsStack.pop();
                 valuesStack.push(evaluateOperation(operation, a, b));
                 continue;
@@ -155,7 +155,7 @@ public class ExpressionEvaluator implements Evaluator {
 
     private static String evaluateNonNegativeInteger(String term) {
         try {
-            Double value = Double.parseDouble(term);
+            Integer value = Integer.parseInt(term);
             if (value < 0) {
                 return formatError(ExpressionError.NEGATIVE_NUMBER);
             }

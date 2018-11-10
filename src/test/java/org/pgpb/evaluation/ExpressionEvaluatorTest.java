@@ -72,43 +72,37 @@ public class ExpressionEvaluatorTest {
                 new Cell [][] {
                     {new Cell("=2+4")}
                 },
-                "6.0"
+                "6"
             },
             {
                 new Cell [][] {
                     {new Cell("=5-4")}
                 },
-                "1.0"
+                "1"
             },
             {
                 new Cell [][] {
                     {new Cell("=5*4")}
                 },
-                "20.0"
+                "20"
             },
             {
                 new Cell [][] {
                     {new Cell("=20/4")}
                 },
-                "5.0"
+                "5"
             },
             {
                 new Cell [][] {
                     {new Cell("=1+2-3*3/3")}
                 },
-                "0.0"
+                "0"
             },
             {
                 new Cell [][] {
                     {new Cell("=20/5*3+2-1")}
                 },
-                "13.0"
-            },
-            {
-                new Cell [][] {
-                    {new Cell("=2+4+3.5+3.1")}
-                },
-                "12.6"
+                "13"
             }
         };
     }
