@@ -79,9 +79,9 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
 
         Deque<Integer> valuesStack = new ArrayDeque<>();
         Deque<String> operatorsStack = new ArrayDeque<>();
-        for (String tv : tokenValues) {
-            if (isOperator(tv)) {
-                operatorsStack.push(tv);
+        for (String v : values) {
+            if (isOperator(v)) {
+                operatorsStack.push(v);
                 continue;
             }
 
@@ -90,39 +90,12 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
             if (!operatorsStack.isEmpty()) {
                 int b = valuesStack.pop();
                 int a = valuesStack.pop();
-                String operation = operatorsStack.pop();
-                valuesStack.push(evaluateOperation(operation, a, b));
+                char operator = operatorsStack.pop().charAt(0);
+                valuesStack.push(Operator.evaluate(operator, a, b));
                 continue;
             }
         }
         return String.valueOf(valuesStack.pop());
-    }
-
-    private static int evaluateOperation(String operation, int a, int b) {
-        if (operation.equals("+")){
-            return a+b;
-        }
-        if (operation.equals("-")){
-            return a-b;
-        }
-        if (operation.equals("*")){
-            return a*b;
-        }
-        if (operation.equals("/")){
-            return a/b;
-        }
-        throw new RuntimeException(
-            String.valueOf(ValueError.UNSUPPORTED_OPERATION)
-        );
-    }
-
-    private static boolean isOperator(String token) {
-        if (token.length() == 1) {
-            return ExpressionTokenizer.OPERATIONS.contains(
-                token.toCharArray()[0]
-            );
-        }
-        return false;
     }
 
     private static boolean isReference(String expression) {
@@ -139,6 +112,13 @@ public class ExpressionSpreadsheetEvaluator implements SpreadsheetEvaluator {
             return token;
         }
         return evaluateTerm(sheet, token);
+    }
+
+    private static boolean isOperator(String token) {
+        if (token.length() == 1) {
+            return Operator.isValid(token.charAt(0));
+        }
+        return false;
     }
 
     private static String evaluateTerm(Spreadsheet sheet, String term) {
