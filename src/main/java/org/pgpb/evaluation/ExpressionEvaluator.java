@@ -29,7 +29,10 @@ public class ExpressionEvaluator implements Evaluator {
             .collect(ImmutableList.toImmutableList());
     }
 
-    private String evaluateText(Spreadsheet sheet, String text) {
+    private static String evaluateText(
+        Spreadsheet sheet,
+        String text
+    ) {
         if ("".equals(text)) {
             return text;
         }
@@ -42,18 +45,18 @@ public class ExpressionEvaluator implements Evaluator {
             return evaluateExpression(sheet, text.substring(1));
         }
 
-        return evaluateTerm(text);
+        return evaluateTerm(sheet, text);
     }
 
-    private boolean isExpression(String text) {
+    private static boolean isExpression(String text) {
         return text.charAt(0) == '=';
     }
 
-    private boolean isTextLabel(String text) {
+    private static boolean isTextLabel(String text) {
         return isTextLabel(text, '\'');
     }
 
-    private boolean isTextLabel(String text, char c) {
+    private static boolean isTextLabel(String text, char c) {
         return text.charAt(0) == c;
     }
 
@@ -95,7 +98,7 @@ public class ExpressionEvaluator implements Evaluator {
         return String.valueOf(valuesStack.pop());
     }
 
-    private double evaluateOperation(String operation, double a, double b) {
+    private static int evaluateOperation(String operation, int a, int b) {
         if (operation.equals("+")){
             return a+b;
         }
@@ -121,6 +124,14 @@ public class ExpressionEvaluator implements Evaluator {
         }
         return false;
     }
+
+    private static boolean isReference(String expression) {
+        if (expression.length() != 2) {
+            return false;
+        }
+        boolean startsWithLetter = Character.isAlphabetic(expression.charAt(0));
+        boolean endsWithDigit = Character.isDigit(expression.charAt(1));
+        return startsWithLetter && endsWithDigit;
     }
 
     private static String evaluateToken(Spreadsheet sheet, String token) {
