@@ -38,10 +38,6 @@ public class ExpressionEvaluator implements Evaluator {
             return text.substring(1);
         }
 
-        if (isOperator(text)) {
-            return text;
-        }
-
         if (isExpression(text)) {
             return evaluateExpression(sheet, text.substring(1));
         }
@@ -61,19 +57,14 @@ public class ExpressionEvaluator implements Evaluator {
         return text.charAt(0) == c;
     }
 
-    private String evaluateExpression(Spreadsheet sheet, String expression) {
-        if (isReference(expression)) {
-            String content = sheet.getCell(expression).getContent();
-            if (content.startsWith("#")) {
-                return content;
-            }
-            return evaluateText(sheet, content);
-        }
-
+    private static String evaluateExpression(
+        Spreadsheet sheet,
+        String expression
+    ) {
         ExpressionTokenizer tokenizer = new ExpressionTokenizer();
         List<String> tokens = tokenizer.tokenize(expression);
         List<String> tokenValues = tokens.stream()
-            .map(t -> evaluateText(sheet, t))
+            .map(t -> evaluateToken(sheet, t))
             .collect(toList());
         Predicate<String> evalError = s -> s.startsWith("#");
         boolean hasErrors = tokenValues.stream()
@@ -122,15 +113,36 @@ public class ExpressionEvaluator implements Evaluator {
         );
     }
 
-    private boolean isOperator(String token) {
-        return ExpressionTokenizer.OPERATIONS.contains(token.toCharArray()[0]);
+    private static boolean isOperator(String token) {
+        if (token.length() == 1) {
+            return ExpressionTokenizer.OPERATIONS.contains(
+                token.toCharArray()[0]
+            );
+        }
+        return false;
+    }
     }
 
-    private boolean isReference(String expression) {
-        return Character.isAlphabetic(expression.charAt(0));
+    private static String evaluateToken(Spreadsheet sheet, String token) {
+        if (isOperator(token)) {
+            return token;
+        }
+        return evaluateTerm(sheet, token);
     }
 
-    private static String evaluateTerm(String term) {
+    private static String evaluateTerm(Spreadsheet sheet, String term) {
+        if ("".equals(term)) {
+            return ExpressionEvaluator.formatError(
+                ExpressionError.INVALID_FORMAT
+            );
+        }
+        if (isReference(term)) {
+            return evaluateReference(sheet, term);
+        }
+        return evaluateNonNegativeInteger(term);
+    }
+
+    private static String evaluateNonNegativeInteger(String term) {
         try {
             Double value = Double.parseDouble(term);
             if (value < 0) {
@@ -140,6 +152,14 @@ public class ExpressionEvaluator implements Evaluator {
         } catch (NumberFormatException e) {
             return formatError(ExpressionError.INVALID_FORMAT);
         }
+    }
+
+    private static String evaluateReference(Spreadsheet sheet, String address) {
+        String content = sheet.getCell(address).getContent();
+        if (content.startsWith("#")) {
+            return content;
+        }
+        return evaluateText(sheet, content);
     }
 
     public static String formatError(ExpressionError error) {
